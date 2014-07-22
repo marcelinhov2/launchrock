@@ -1,0 +1,17 @@
+doctype html
+
+html(lang="en")
+  head
+    meta(charset='utf-8')
+    title Angular Kickoff
+    // inject:css 
+    // endinject 
+  body(ng-app="app" ng-controller="appController")
+    #wrap
+      .centralize
+        header-directive
+        ng-view(id="ng_view")
+        footer-directive
+
+    // inject:js 
+    // endinject 
