@@ -42,19 +42,19 @@ class Rescue extends Controller
         sort_by: 'timestamp'
         sort_by_dir: 'DESC'
 
-      @rescueService.get_users data
-        .success (data) =>
-          index = 0
+      promise = @rescueService.get_users data
+      promise.then ((response) =>
+        index = 0
 
-          for user in data[0].response.site_user_analytics
-            if index < ( data[0].response.site_user_analytics.length - 1 )
-              @get_user_details user
-              index++
-            else
-              @get_user_details user, true
-
-        .error =>
-          alert "Error on page #{self.actual_page}"
+        for user in response.data[0].response.site_user_analytics
+          if index < ( response.data[0].response.site_user_analytics.length - 1 )
+            @get_user_details user
+            index++
+          else
+            @get_user_details user, true
+      ), ( ->
+        alert "Error on page #{self.actual_page}"
+      )
 
       self.actual_page++
 
@@ -65,20 +65,21 @@ class Rescue extends Controller
       site_id: @$scope.data.site_id
       site_user_id: user.UID
 
-    @rescueService.get_user_details data
-      .success (extra_fields) =>
-        extra_fields = angular.fromJson extra_fields[0].response.site_user.extra_fields
-        user['first_name'] = extra_fields['first-name']
-        user['last_name'] = extra_fields['last-name']
 
-        @$scope.$broadcast 'return_user', user
+    promise = @rescueService.get_user_details data
+    promise.then ((response) =>
+      extra_fields = angular.fromJson response.data[0].response.site_user.extra_fields
+      user['first_name'] = extra_fields['first-name']
+      user['last_name'] = extra_fields['last-name']
 
-        if is_last
-          @$scope.$emit 'hide_loader'
-          @$scope.$emit 'all_users'
+      @$scope.$broadcast 'return_user', user
 
-      .error =>
-        alert "Error on user #{UID}"
+      if is_last
+        @$scope.$emit 'hide_loader'
+        @$scope.$emit 'all_users'
+    ), ( ->
+      alert "Error on user #{UID}"
+    )
 
   push_user: (event, user) =>
     @users.push user
