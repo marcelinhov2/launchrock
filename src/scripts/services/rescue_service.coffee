@@ -1,5 +1,5 @@
 class Rescue extends Service
-  constructor: (@$http) ->
+  constructor: (@$q, @$http) ->
 
   get_users: (data) ->
     @$http(

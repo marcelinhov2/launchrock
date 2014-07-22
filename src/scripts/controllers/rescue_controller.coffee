@@ -1,16 +1,12 @@
 class Rescue extends Controller
   users: []
-  user_id: '195BNZBC'
-  session_id: 'f28c13f0c6edbc78a7920880e88515fa_Auw1ktcuGL_1406057683'
-  site_id: '13C7JTYE'
-  sort_by: 'timestamp'
-  sort_by_dir: 'DESC'
-  total_pages: 1
-
+  
   constructor: (@$scope, @$element, @rescueService) ->
     do @declare_vars
     do @cache_DOM_elements
     do @set_triggers
+
+    do @methods_encapsulation
 
   declare_vars: ->
     @$scope.data = {}
@@ -26,22 +22,25 @@ class Rescue extends Controller
     @$scope.$on 'all_users', @flatten
     @$scope.$on 'return_user', @push_user
 
+  methods_encapsulation: ->
+    @$scope.get_users = @get_users
+
   get_users: =>
     @$scope.$emit 'show_loader'
 
     self = @
     @actual_page = 1
 
-    while @actual_page <= @total_pages
+    while @actual_page <= @$scope.data.total_pages
       
       data =
-        user_id: @user_id
-        session_id: @session_id
-        site_id: @site_id
+        user_id: @$scope.data.user_id
+        session_id: @$scope.data.session_id
+        site_id: @$scope.data.site_id
         page:  @actual_page
-        limit: 100
-        sort_by: @sort_by
-        sort_by_dir: @sort_by_dir
+        limit: @$scope.data.limit
+        sort_by: 'timestamp'
+        sort_by_dir: 'DESC'
 
       @rescueService.get_users data
         .success (data) =>
@@ -61,9 +60,9 @@ class Rescue extends Controller
 
   get_user_details: (user, is_last) =>
     data =
-      user_id: @user_id
-      session_id: @session_id
-      site_id: @site_id
+      user_id: @$scope.data.user_id
+      session_id: @$scope.data.session_id
+      site_id: @$scope.data.site_id
       site_user_id: user.UID
 
     @rescueService.get_user_details data

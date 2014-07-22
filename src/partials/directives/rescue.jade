@@ -1,5 +1,11 @@
 #rescueList
-  a(id="btRescue") Click for rescue your users data
+  form(name="newsletterForm" ng-submit="get_users()" novalidate)
+    input(type="text" name="user_id" ng-model="data.user_id" placeholder="User ID" required)
+    input(type="text" name="session_id" ng-model="data.session_id" placeholder="Session ID" required)
+    input(type="text" name="site_id" ng-model="data.site_id" placeholder="Site ID" required)
+    input(type="text" name="limit" ng-model="data.limit" placeholder="Limit" required)
+    input(type="text" name="total_pages" ng-model="data.total_pages" placeholder="Total Pages" required)
+    input(type="submit" value="Click for rescue your users data")
 
   ul
     li(ng-repeat="user in users")
