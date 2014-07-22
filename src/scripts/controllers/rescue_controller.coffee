@@ -1,5 +1,10 @@
 class Rescue extends Controller
   users: []
+  user_id: '195BNZBC'
+  session_id: 'f28c13f0c6edbc78a7920880e88515fa_Auw1ktcuGL_1406057683'
+  site_id: '13C7JTYE'
+  sort_by: 'timestamp'
+  sort_by_dir: 'DESC'
   total_pages: 1
 
   constructor: (@$scope, @$element, @rescueService) ->
@@ -19,19 +24,21 @@ class Rescue extends Controller
     @$scope.$on 'return_user', @push_user
 
   get_users: =>
+    @$scope.$emit 'show_loader'
+
     self = @
     @actual_page = 1
 
     while @actual_page <= @total_pages
       
       data =
-        user_id: '195BNZBC'
-        session_id:  'dc190096209f31e14018ba540682f1ed_AJKoAzWPad_1406043168'
-        site_id: '13C7JTYE'
+        user_id: @user_id
+        session_id: @session_id
+        site_id: @site_id
         page:  @actual_page
-        limit: 1
-        sort_by: 'timestamp'
-        sort_by_dir: 'DESC'
+        limit: 100
+        sort_by: @sort_by
+        sort_by_dir: @sort_by_dir
 
       @rescueService.get_users data
         .success (data) =>
@@ -45,15 +52,15 @@ class Rescue extends Controller
               @get_user_details user, true
 
         .error =>
-          console.log "Error on page #{self.actual_page}"
+          alert "Error on page #{self.actual_page}"
 
       self.actual_page++
 
   get_user_details: (user, is_last) =>
     data =
-      user_id: '195BNZBC'
-      session_id: 'dc190096209f31e14018ba540682f1ed_AJKoAzWPad_1406043168'
-      site_id: '13C7JTYE'
+      user_id: @user_id
+      session_id: @session_id
+      site_id: @site_id
       site_user_id: user.UID
 
     @rescueService.get_user_details data
@@ -65,10 +72,11 @@ class Rescue extends Controller
         @$scope.$broadcast 'return_user', user
 
         if is_last
+          @$scope.$emit 'hide_loader'
           @$scope.$emit 'all_users'
 
       .error =>
-        console.log "Error on user #{UID}"
+        alert "Error on user #{UID}"
 
   push_user: (event, user) =>
     @users.push user

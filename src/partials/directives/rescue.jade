@@ -1,8 +1,11 @@
-a(id="btRescue") Click for rescue your data
+#rescueList
+  a(id="btRescue") Click for rescue your users data
 
-ul
-  li(ng-repeat="user in users")
-    p.id UID: {{user.UID}}
-    p.email email: {{user.email}}
-    p.name first name: {{user.first_name}}
-    p.lname last name: {{user.last_name}}
+  ul
+    li(ng-repeat="user in users")
+      p.id UID: {{user.UID}}
+      p.email email: {{user.email}}
+      p.name first name: {{user.first_name}}
+      p.lname last name: {{user.last_name}}
+
+  a(id="btSave" ng-show="users.length") Export CSV

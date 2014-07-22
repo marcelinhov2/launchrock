@@ -6,8 +6,53 @@
 @import "mixins.styl"
 
 body
-  background GRAY
+  background white
+
+html
+  position relative
+  height 100%
+  min-height 100%
 
 .centralize
   width 960px
   margin 0 auto
+
+h1
+  font-family Arial
+  font-size 37px
+  color black
+  text-transform uppercase
+  text-align center
+  margin 20px 0
+
+#loader
+  display none
+  position absolute
+  top 50%
+  left 50%
+  width 43px
+  height 11px
+  margin-left -21px
+  margin-top -5px
+
+#rescueList
+  margin-bottom 40px
+  a
+    font-family Arial
+    padding 10px 0
+    background #42bd44
+    border none
+    text-align center
+    text-transform uppercase
+    text-decoration none
+    color white
+    cursor pointer
+    outline none
+    display block
+
+  ul
+    margin-top 20px
+    li
+      background GRAY
+      padding 10px
+      margin-bottom 10px
