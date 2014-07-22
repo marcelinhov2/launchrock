@@ -17,9 +17,12 @@ class Rescue extends Controller
 
   cache_DOM_elements: ->
     @rescue_bt = @$element.find '#btRescue'
+    @export_bt = @$element.find '#btExport'
 
   set_triggers: ->
     @rescue_bt.click @get_users
+    @export_bt.click @generate_csv
+
     @$scope.$on 'all_users', @flatten
     @$scope.$on 'return_user', @push_user
 
@@ -84,3 +87,42 @@ class Rescue extends Controller
   flatten: =>
     @users = _.flatten @users
     @$scope.users = @users
+
+  generate_csv: =>
+    content = [
+      [
+        "ID"
+        "Email"
+        "Fname"
+        "Lname"
+      ]
+    ]
+
+    for user in @users
+      user_array = []
+
+      user_array[0] = user.UID
+      user_array[1] = user.email
+      user_array[2] = user.first_name
+      user_array[3] = user.last_name
+
+      content.push user_array
+
+    finalVal = ""
+    i = 0
+
+    while i < content.length
+      value = content[i]
+      j = 0
+
+      while j < value.length
+        innerValue = (if value[j] is null then "" else value[j].toString())
+        result = innerValue.replace(/"/g, "\"\"")
+        result = "\"" + result + "\""  if result.search(/("|,|\n)/g) >= 0
+        finalVal += ","  if j > 0
+        finalVal += result
+        j++
+      finalVal += "\n"
+      i++
+    
+    window.open "data:text/csv;charset=utf-8," + encodeURIComponent(finalVal)
